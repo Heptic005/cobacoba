@@ -132,7 +132,6 @@ class _DashboardState extends State<Dashboard> {
                                     duration: Duration(seconds: 1),
                                     curve: Curves.easeInOut,
                                   );
-                                  ;
                                 }),
                           ),
 

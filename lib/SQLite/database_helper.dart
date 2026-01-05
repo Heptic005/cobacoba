@@ -87,13 +87,13 @@ class DatabaseHelper {
   }
 
   // Update Product
-  Future<int> updateListProduct(ListProductJson product) async {
-    final Database db = await init();
-    return db.rawUpdate(
-      "update listproducts set productName = ?, productKeterangan = ? where productID = ?",
-      [product.productName, product.productKeterangan, product.productID],
-    );
-  }
+  // Future<int> updateListProduct(ListProductJson product) async {
+  //   final Database db = await init();
+  //   return db.rawUpdate(
+  //     "update listproducts set productName = ?, productKeterangan = ? where productID = ?",
+  //     [product.productName, product.productKeterangan, product.productID],
+  //   );
+  // }
 
   // Update Stock
   // Future<int> updateStock(int id, int stock) async {

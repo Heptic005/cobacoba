@@ -8,26 +8,25 @@ String ListProductJsonToJson(ListProductJson data) =>
     json.encode(data.toJson());
 
 class ListProductJson {
-  final int productID;
-  final String productName;
-  final String productKeterangan;
+  final int idProduk;
+  final String namaProduk;
+  final String kodeProduk;
 
   ListProductJson({
-    this.productID = 0,
-    required this.productName,
-    required this.productKeterangan,
+    this.idProduk = 0,
+    required this.namaProduk,
+    required this.kodeProduk,
   });
 
   factory ListProductJson.fromJson(Map<String, dynamic> json) =>
       ListProductJson(
-        productID: json["productID"],
-        productName: json["productName"],
-        productKeterangan: json["productKeterangan"],
+        idProduk: json['idProduk'],
+        namaProduk: json['namaProduk'],
+        kodeProduk: json['kodeProduk'],
       );
 
   Map<String, dynamic> toJson() => {
-    // "productID": productID,
-    "productName": productName,
-    "productKeterangan": productKeterangan,
+    "namaProduk": namaProduk,
+    "kodeProduk": kodeProduk,
   };
 }

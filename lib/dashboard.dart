@@ -2,7 +2,11 @@ import 'dart:ui';
 
 import 'package:animated_toggle_switch/animated_toggle_switch.dart';
 import 'package:bitsdojo_window/bitsdojo_window.dart';
+import 'package:dakara_weighbridge/Menu/menu_details.dart';
 import 'package:dakara_weighbridge/Menu/menu_items.dart';
+import 'package:dakara_weighbridge/Pages/login_page.dart';
+import 'package:dakara_weighbridge/Pages/technician_page.dart';
+import 'package:dakara_weighbridge/Services/auth_service.dart';
 import 'package:dakara_weighbridge/Themes/app_themes.dart';
 import 'package:flutter/material.dart';
 
@@ -15,8 +19,10 @@ class Dashboard extends StatefulWidget {
 
 class _DashboardState extends State<Dashboard> {
   final menu = MenuItems();
+  // final menu = MenuItems(); // Removed as per instruction
   final PageController pageController = PageController();
-  List<String> menuItems = ["Transaction", "Report", "Data"];
+  List<String> menuItems = []; // Modified as per instruction
+  List<MenuDetails> items = []; // Added as per instruction
   int value = 0;
   Color bgGrey = const Color.fromARGB(255, 228, 230, 232);
   Color royalGrey = const Color.fromARGB(255, 86, 105, 113);
@@ -26,7 +32,28 @@ class _DashboardState extends State<Dashboard> {
   @override
   void initState() {
     super.initState();
+    _setupMenu(); // Added as per instruction
     // xAlign = transactionAlign;
+  }
+
+  // Added as per instruction
+  void _setupMenu() {
+    final user = AuthService().currentUser;
+
+    List<MenuDetails> allItems = menu.items;
+
+    if (AuthService().isManager || AuthService().isSupervisor) {
+      // Manager & Supervisor see all menus (Transaction, Report, Data)
+      items = allItems;
+    } else {
+      // Operator: Transaction & Report (based on flowchart "Export Report" access)
+      items =
+          allItems
+              .where((i) => i.title == "Transaction" || i.title == "Report")
+              .toList();
+    }
+
+    menuItems = items.map((e) => e.title).toList();
   }
 
   // This widget is the root of your application.
@@ -59,8 +86,8 @@ class _DashboardState extends State<Dashboard> {
               children: [
                 PageView.builder(
                   controller: pageController,
-                  itemCount: menu.items.length,
-                  itemBuilder: (context, index) => menu.items[index].page,
+                  itemCount: items.length,
+                  itemBuilder: (context, index) => items[index].page,
                 ),
 
                 // Top Bar
@@ -83,7 +110,10 @@ class _DashboardState extends State<Dashboard> {
                               vertical: 3,
                             ),
                             current: value,
-                            values: const [0, 1, 2],
+                            values: List.generate(
+                              items.length,
+                              (index) => index,
+                            ),
                             iconOpacity: 0.7,
                             height: 45,
                             indicatorSize: const Size.fromWidth(90),
@@ -300,7 +330,27 @@ class _DashboardState extends State<Dashboard> {
                                       ),
                                     ),
                                     child: IconButton(
-                                      onPressed: () {},
+                                      onPressed: () {
+                                        if (AuthService().isManager) {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder:
+                                                  (c) => const TechnicianPage(),
+                                            ),
+                                          );
+                                        } else {
+                                          ScaffoldMessenger.of(
+                                            context,
+                                          ).showSnackBar(
+                                            const SnackBar(
+                                              content: Text(
+                                                "Access Denied: Manager Only",
+                                              ),
+                                            ),
+                                          );
+                                        }
+                                      },
                                       icon: Icon(Icons.settings),
                                       color: Colors.white,
                                       iconSize: 18,
@@ -313,7 +363,15 @@ class _DashboardState extends State<Dashboard> {
                                       borderRadius: BorderRadius.circular(50),
                                     ),
                                     child: IconButton(
-                                      onPressed: () {},
+                                      onPressed: () {
+                                        AuthService().logout();
+                                        Navigator.pushReplacement(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (c) => const LoginPage(),
+                                          ),
+                                        );
+                                      },
                                       icon: Icon(Icons.person),
                                     ),
                                   ),

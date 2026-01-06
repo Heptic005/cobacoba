@@ -1,5 +1,5 @@
 import 'package:dakara_weighbridge/Menu/menu_details.dart';
-import 'package:dakara_weighbridge/Pages/data.dart';
+import 'package:dakara_weighbridge/Pages/master_data_page.dart';
 import 'package:dakara_weighbridge/Pages/report.dart';
 import 'package:dakara_weighbridge/Pages/transaction.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +19,7 @@ class MenuItems {
     MenuDetails(
       title: "Data",
       icon: Icons.view_in_ar_rounded,
-      page: DataCustomerBarang(),
+      page: MasterDataPage(),
     ),
   ];
 }

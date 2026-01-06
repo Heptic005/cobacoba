@@ -1,5 +1,5 @@
 import 'package:bitsdojo_window/bitsdojo_window.dart';
-import 'package:dakara_weighbridge/dashboard.dart';
+import 'package:dakara_weighbridge/Pages/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
@@ -22,7 +22,7 @@ Future main() async {
   await initializeDateFormatting(
     'id_ID',
     null,
-  ).then((_) => runApp(const Dashboard()));
+  ).then((_) => runApp(const MaterialApp(home: LoginPage())));
 
   doWhenWindowReady(() {
     final win = appWindow;
